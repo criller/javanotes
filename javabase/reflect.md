@@ -6,13 +6,13 @@
 
 RTTI（Run-Time Type Identification）运行时类型识别。在《Thinking in Java》一书第十四章中有提到，其作用是在运行时识别一个对象的类型和类的信息。主要有两种方式：一种是“传统的”RTTI，它假定我们在编译时已经知道了所有的类型；另一种是“反射”机制，它允许我们在运行时发现和使用类的信息。
 
-![image-20210927191700934](reflect.assets/image-20210927191700934.png)
+![image-20210927191700934](assets/image-20210927191700934.png)
 
 反射就是把Java类中的各种成分映射成一个个的Java对象
 
 例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。
 
-![image-20210927191847619](reflect.assets/image-20210927191847619.png)
+![image-20210927191847619](assets/image-20210927191847619.png)
 
 > 所以，我们首先需要理解Class类以及类的加载机制；然后基于此我们如何通过反射获取Class类以及类中的成员变量、成员方法和构造方法等。
 
@@ -20,7 +20,7 @@ RTTI（Run-Time Type Identification）运行时类型识别。在《Thinking in 
 
 源代码通过编译器编译为字节码，再通过类加载子系统加载到JVM中，生成对应的Class对象。所有的数据类型，包括基本数据类型和关键字void同样表现为Class对象。这也说明了在Java中一切皆为对象。
 
-<img src="reflect.assets/image-20210927193856296.png" alt="image-20210927193856296" style="zoom:150%;" />
+<img src="assets/image-20210927193856296.png" alt="image-20210927193856296" style="zoom:150%;" />
 
 所以，从中我们可以得到一下几点信息：
 
@@ -35,11 +35,11 @@ RTTI（Run-Time Type Identification）运行时类型识别。在《Thinking in 
 
 回顾一下类加载流程，源代码经过编译成class字节码后，类加载子系统通过 **加载 -> 链接 -> 初始化 -> 使用 -> 卸载**
 
-![image-20210927194408670](reflect.assets/image-20210927194408670.png)
+![image-20210927194408670](assets/image-20210927194408670.png)
 
 对上图类加载流程和内存结构的简化版
 
-![image-20210927194620622](reflect.assets/image-20210927194620622.png)
+![image-20210927194620622](assets/image-20210927194620622.png)
 
 ## 反射的使用
 
