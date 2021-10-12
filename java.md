@@ -187,6 +187,8 @@ Java的反射机制在平时的业务开发过程中使用频率较低，但是�
 - 异步处理，提升性能 （当存在一对多调用时，可以通过消息通知相关系统）
 - 蓄流压测（线上有些链路不好压测，可以通过堆积线上一定量消息再开放来压测）
 
+⽬前主流的MQ主要是Rocketmq、kafka、Rabbitmq、paslur
+
 **MQ选型**
 
 **中小型公司**，技术实力较为一般，技术挑战不是特别高，用 **RabbitMQ** （开源、社区活跃）是不错的选择；**大型公司**，基础架构研发实力较强，用 **RocketMQ**（Java二次开发） 是很好的选择。
@@ -226,15 +228,13 @@ Java的反射机制在平时的业务开发过程中使用频率较低，但是�
 
 > 关键机制的设计原理参考官方文档：https://github.com/apache/rocketmq/blob/master/docs/cn/design.md
 
-
-
-![image-20211011224803085](../hexo/blog/source/images/image-20211011224803085.png)
+![image-20211012103419721](java.assets/image-20211012103419721.png)
 
 #### Producer怎么发送消息
 
 Producer与Name Server集群中某个节点（随机选择）建立长连接，定期获取topic路由信息。Producer轮询某topic下所有队列的方式来实现发送方的负载均衡。如图
 
-<img src="../hexo/blog/source/images/image-20211011230950804.png" alt="image-20211011230950804" style="zoom:50%;" />
+<img src="java.assets/image-20211012103532570.png" alt="image-20211012103532570" style="zoom:50%;" />
 
 #### 消息存储
 
@@ -250,7 +250,7 @@ Producer与Name Server集群中某个节点（随机选择）建立长连接，�
 
 Consumer实现负责均衡：
 
-<img src="../hexo/blog/source/images/image-20211011233251054.png" alt="image-20211011233251054" style="zoom:50%;" />
+<img src="java.assets/image-20211012103551893.png" alt="image-20211012103551893" style="zoom:50%;" />
 
 consumer端会通过RebalanceService线程，10s做一次基于Topic下的所有队列负载：
 
@@ -264,7 +264,7 @@ consumer端会通过RebalanceService线程，10s做一次基于Topic下的所有
 
 RocketMQ在4.3.0版本开始支持分布式事务消息。主要通过2PC思想来实现提交事务消息，同时增加了补偿逻辑来回查二阶段超时或者失败的消息
 
-![image-20211012084050102](../hexo/blog/source/images/image-20211012084050102.png)
+![image-20211012103608567](java.assets/image-20211012103608567.png)
 
 主要分为两个流程：正常事务操作、事务消息的补偿流程
 
@@ -283,7 +283,7 @@ RocketMQ在4.3.0版本开始支持分布式事务消息。主要通过2PC思想�
 
 除了MQ的事务处理方式，可以通过增加本地事件表的方式来实现
 
-![image-20211010221456051](../hexo/blog/source/images/image-20211010221456051.png)
+![image-20211012103623566](java.assets/image-20211012103623566.png)
 
 #### **消息重复**
 
@@ -350,8 +350,4 @@ RocketMQ的负载均衡都是在client端完成的。
 # 十一、部署与工具专题
 
 # 十二、人工智能专题
-
-# 消息队列篇
-
-paslur
 
