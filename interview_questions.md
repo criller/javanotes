@@ -61,3 +61,12 @@ final修饰的属性变量叫常量，常量必须初始化，初始化之后值
 # 2. Java进阶
 
 ## 2.1 集合
+
+# 3. kafka
+
+## 3.1 kafka中的ISR和AR分别代表什么？
+
+ISR：与leader保持同步的follower集合
+
+  AR：分区的所有副本
+

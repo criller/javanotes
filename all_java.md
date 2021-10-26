@@ -686,7 +686,9 @@ Kafka有三种分配策略，roundrobin，range，StickyAssignor
 
 Kafka 0.9版本之前，consumer默认将offset保存在Zookeeper中，从0.9版本开始，consumer默认将offset保存在Kafka一个内置的topic中，该topic为***\*_\*******\*_consumer_offsets\****。
 
-### 18.3.7 常用命令
+### 18.3.7 kafka事务
+
+### 18.3.8 常用命令
 
 #### 查看topic列表
 
@@ -775,6 +777,21 @@ bin/kafka-topics.sh --zookeeper hadoop102:2181 --alter --topic first --partition
 答： 出现消息积压的情况主要是生产能力高于消费能力，解决方案，扩容消费机器，或者对生产限流
 
 
+
+# 19. dubbo
+
+> 目标：
+>
+> 1. 为什么要使用dubbo， dubbo的作用
+> 2. 怎么使用dubbo
+> 3. dubbo的架构设计
+> 4. dubbo的相关特性
+> 5. dubbo的相关面试题
+> 6. 源码分析？
+
+普通哈希与一致性哈希
+
+<img src="all_java.assets/image-20211024193102999.png" alt="image-20211024193102999" style="zoom:50%;" />
 
 # 四、分布式专题
 
