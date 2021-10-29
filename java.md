@@ -63,9 +63,9 @@
 
 ### 1.1 Java基础语法特性
 
-Java equals()和hashCode()的作用
+#### Java equals()和hashCode()的作用
 
-equals() 源码中默认就是通过 “==”来比较两个对象是否相等。在引用类型中，== 用来比较两个对象引用地址是否相同。
+equals() 源码中默认就是通过 `==`来比较两个对象是否相等。在引用类型中，`==` 用来比较两个对象引用地址是否相同。
 
 hashCode()用于获取对象的哈希码
 
@@ -133,7 +133,41 @@ public class UserInfo {
 }
 ```
 
+举例场景：
 
+将对象存放到HashMap或者HashSet中时，`hashCode()`方法决定了对象会存放到哪个`bucket`里，当多个对象的哈希值冲突时，`equals()`方法决定了这些对象是否是“同一个对象”。所以，如果要将自定义的对象放入到HashMap或者HashSet中，需要重写`hashCode()`和`equals()`方法。
+
+### 1.2 面向对象
+
+#### 接口特性
+
+- 用interface关键字声明
+
+- 每个方法都是抽象方法，除了static修饰的方法
+
+- 接口中定义的变量，默认是被 static和final修饰的常量
+
+  ```java
+  public interface Entry {
+      String value = "123";
+      String values = "init";
+      static String test(){
+          return "test";
+      }
+  }
+  ```
+
+  
+
+- 接口不能被类继承，只能通过implements方式实现
+
+- 子接口可以继承多个接口
+
+  ```java
+  public interface Hockey extends Sports, Event
+  ```
+
+  
 
 ### 1.5 反射机制详解
 
@@ -191,22 +225,59 @@ Java的反射机制在平时的业务开发过程中使用频率较低，但是�
 
 目标：整理各集合类型的特性以及底层数据结构
 
+该章节只梳理核心知识点，详细的源码分析请看[集合源码分析](javabase/map.md)
+
 Java集合体系
 
 ![image-20211014092548847](java.assets/image-20211014092548847.png)
 
 ### 2.1 Map集合
 
-| Map类型               | 数据结构 | 有序性 | 可否为null                       | 是否同步 | 时间复杂度              |
-| --------------------- | -------- | ------ | -------------------------------- | -------- | ----------------------- |
-| HashMap               |          | 无序   | 允许一个key为null, value没有限制 | 否       | 插入O(1)，查找O(1)      |
-| LinkedHashMap         |          |        |                                  |          | 插入O(1)，查找O(log(n)) |
-| TreeMap               |          |        |                                  |          | 插入O(1)，查找O(log(n)) |
-| HashTable             |          |        |                                  |          | 插入O(1),查找O(n²)      |
-| ConcurrentHashMap     |          |        |                                  |          |                         |
-| ConcurrentSkipListMap |          |        |                                  |          |                         |
+Java为数据结构中的映射定义了一个接口java.util.Map接口，此接口主要有四个常用的实现类，分别为
 
+- HashMap
+- HashTable
+- TreeMap
+- LinkedHashMap
 
+此外，JUC并发包中定义了ConcurrentMap接口，继承java.util.Map接口，此接口主要常用的实现类，分别为
+
+- ConcurrentHashMap
+- ConcurrentLinkedHashMap
+
+| Map类型               | 数据结构                                                     | 有序性 | 可否为null                       | 是否同步 | 时间复杂度                                                   |
+| --------------------- | ------------------------------------------------------------ | ------ | -------------------------------- | -------- | ------------------------------------------------------------ |
+| HashMap               | jdk1.7及之前，使用`数组+链表`，jdk8之后，采用 `数组 + 链表 + 红黑树` | 无序   | 允许一个key为null, value没有限制 | 否       | 插入O(1)，查找取决于链表的长度，为O(n)<br>jdk8以后，当链表的长度大于8时，会将链表转换为红黑树，在这些位置的查找可以降低时间复杂度为O(logN) |
+| LinkedHashMap         |                                                              |        |                                  |          | 插入O(1)，查找O(log(n))                                      |
+| TreeMap               |                                                              |        |                                  |          | 插入O(1)，查找O(log(n))                                      |
+| HashTable             |                                                              |        |                                  |          | 插入O(1),查找O(n²)                                           |
+| ConcurrentHashMap     |                                                              |        |                                  |          |                                                              |
+| ConcurrentSkipListMap |                                                              |        |                                  |          |                                                              |
+
+#### 2.1.2 HashMap
+
+> 目标： 
+>
+> 1. 了解HashMap的作用，能干什么
+> 2. 了解HashMap的特性
+> 3. 了解HashMap是什么，存储结构
+> 4. 了解HashMap的实现原理
+>    - get过程分析
+>    - put执行过程
+>    - 扩容过程
+> 5. 什么是哈希冲突（碰撞）
+
+HashMap是一个采用哈希表实现键值对集合，继承自AbstractMap，实现了Map接口
+
+特点：
+
+- 内部数据存储结构，jdk1.7及之前，使用`数组+链表`，jdk8之后，采用 `数组 + 链表 + 红黑树`
+- 最多只允许一条记录的key为null, 允许多条记录的value为null
+- 非线程安全
+- 元素是无序的
+- 插入、查询的时间复杂度基本是O(1)， 前提是有适当的哈希函数，让元素均匀分布
+- 实现了Map的全部方法
+- 遍历整个Map需要的时间与数组的长度成正比
 
 ### 2.2 List集合
 
