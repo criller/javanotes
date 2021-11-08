@@ -174,7 +174,16 @@ public class UserInfo {
 }
 ```
 
+## 1.2 jdk8特性
 
+### 知识体系
+
+![image-20211108085921758](all_java.assets/image-20211108085921758.png)
+
+### 参考文档
+
+- Java全栈知识体系：https://pdai.tech/md/java/java8/java8.html
+- JDK8新特性上课笔记： ./javabase/jdk8新特性.pdf
 
 ## 1.5 反射机制详解
 
