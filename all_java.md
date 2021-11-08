@@ -183,7 +183,7 @@ public class UserInfo {
 ### 参考文档
 
 - Java全栈知识体系：https://pdai.tech/md/java/java8/java8.html
-- JDK8新特性上课笔记： ./javabase/jdk8新特性.pdf
+- JDK8新特性上课笔记：[Java8详细解释](javabase/java8.md)
 
 ## 1.5 反射机制详解
 
