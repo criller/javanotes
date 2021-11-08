@@ -72,7 +72,15 @@ ISR：与leader保持同步的follower集合
 
 # 4.MYSQL
 
-4.1 Mysql是如何保证事务的ACID的？
+## 4.1 Mysql是如何保证事务的ACID的？
+
+答：ACID就是事务的特性。既原子性（A） 一致性（C） 隔离性（I） 持久性（D）
+其中undolog保证原子性，undo就是回滚日志，会记录数据修改之前的逻辑日志，一旦发生异常，就可以用undoLog来进行数据回滚
+事务的隔离级别来保证隔离性 ，隔离级别有RU、RC、RR、串行化，其中RU存在脏读、不可重复读、幻读问题、RC解决了脏读问题。
+在InnoDB中、RR解决了脏读、不可重复读、幻读问题、串行化不存在并发，也就没有脏读、不可重复读、幻读问题。
+其中innoDB中RR解决幻读是通过MVCC或者LBCC去解决，MVCC在读场景通过快照版本去解决幻读，LBCC通过加间隙锁去解决幻读
+Mysql的持久性是通过RedoLog和double write来保证数据写了就一定要做到，redolog就是恢复日志，为了性能，在内存也会有个redologbuffer内存区间，然后再跟磁盘交互，所以，redolog也会存在数据丢失的场景，如果要保证不丢失，必须要保证redologbuffer里的数据写到磁盘，才commit成功！！
+一致性 就是我的数据要完整不被破坏 mysql中的AID，都是为了保证数据的一致性。
 
 # 5.JVM
 
@@ -87,5 +95,10 @@ JVM调优我给一个大体的步骤，但是不同的问题也要具体看待�
 
 # 综合
 
-CPU使用率过高应该如何排查？
+## CPU使用率过高应该如何排查？
+
+答：1.使用top 定位到占用CPU高的进程PIDtop 指令通过ps aux | grep PID命令
+      2.获取线程信息，并找到占用CPU高的线程ps -mp 进程ID -o THREAD,tid,time | sort -rn 
+      3.将需要的线程ID转换为16进制格式printf "%x\n" tid
+      4.打印线程的堆栈信息jstack pid |grep tid -A 30
 
