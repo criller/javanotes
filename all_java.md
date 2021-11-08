@@ -687,6 +687,8 @@ Kafka 0.9版本之前，consumer默认将offset保存在Zookeeper中，从0.9版
 
 ### 18.3.7 kafka事务
 
+![image-20211028221526417](all_java.assets/image-20211028221526417.png)
+
 ### 18.3.8 常用命令
 
 #### 查看topic列表
@@ -785,8 +787,9 @@ bin/kafka-topics.sh --zookeeper hadoop102:2181 --alter --topic first --partition
 > 2. 怎么使用dubbo
 > 3. dubbo的架构设计
 > 4. dubbo的相关特性
-> 5. dubbo的相关面试题
-> 6. 源码分析？
+> 5. 一致性哈希
+> 6. dubbo的相关面试题
+> 7. 源码分析？
 
 普通哈希与一致性哈希
 
