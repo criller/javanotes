@@ -82,6 +82,10 @@ ISR：与leader保持同步的follower集合
 Mysql的持久性是通过RedoLog和double write来保证数据写了就一定要做到，redolog就是恢复日志，为了性能，在内存也会有个redologbuffer内存区间，然后再跟磁盘交互，所以，redolog也会存在数据丢失的场景，如果要保证不丢失，必须要保证redologbuffer里的数据写到磁盘，才commit成功！！
 一致性 就是我的数据要完整不被破坏 mysql中的AID，都是为了保证数据的一致性。
 
+## 4.2 为什么推荐使用递增的ID（而不是身份证、UUID）作为主键索引？
+
+## 4.3 AVL树（平衡二叉树）、B树、B+树分别解决了什么问题？
+
 # 5.JVM
 
 ## 5.1 平时有JVM调优的经验吗？
