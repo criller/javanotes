@@ -944,3 +944,64 @@ BASE理论
 
 # 31. 数据结构
 
+> 最大误区：做题只做一遍
+>
+> 优化的思想： 空间换时间和升维
+
+## 31.1 数组
+
+时间复杂度：
+
+- 插入 or 删除 ： O(n)
+- 查询：O(1)
+
+实战：
+
+- 283-移动零：https://leetcode-cn.com/problems/move-zeroes/
+  - 优解：可以采用双指针方式, 时间复杂度O(n)
+- 11-盛最多水的容器：https://leetcode-cn.com/problems/container-with-most-water/
+  - 暴力枚举： 时间复杂度O(n^2)
+  - 双指针：左右移动，每次移动短板，时间复杂度O(n)
+- 70-爬楼梯：https://leetcode-cn.com/problems/climbing-stairs/
+  - 化繁为简的思考，找最近重复子问题，因为程序只能是if else, loop 或者递归
+  - 动态规划：压缩空间，斐波拉契数列简化版，时间复杂度O(n)
+- 15-三数之和：https://leetcode-cn.com/problems/3sum/
+  - 暴力三重遍历： 时间复杂度O(n^3)
+  - 排序 + 哈希表： 时间复杂度O(n^2)
+  - 排序 + 双指针：时间复杂度O(n^2)
+
+```java
+// 升序排序 + 双指针方式
+    public List<List<Integer>> threeSum(int[] nums) {
+		List<List<Integer>> resList = new ArrayList<>();
+        // 长度不符合，直接结束逻辑
+        if(nums.length < 3){
+            return resList;
+        }
+        // 升序排序
+        Arrays.sort(nums);
+        for(int k = 0; k < nums.length - 2; k++) {
+            // 如果元素开始大于0，说明都不符合条件，可以结束逻辑
+            if(nums[k] > 0) break;
+            // 如果当前元素和上个元素相同，可以跳过
+            if(k > 0 &&nums[k] == nums[k -1]) continue;
+            int i = k + 1, j = nums.length -1;
+            while(i < j){
+                int sum = nums[k] + nums[i] + nums[j];
+                if(sum == 0) {
+                    resList.add(new ArrayList<>(Arrays.asList(nums[k], nums[i], nums[j])));
+                    while(i < j && nums[i] == nums[++i]) {}
+                    while(i < j && nums[j] == nums[--j]) {}
+                }else if(sum > 0) {
+					while(i < j && nums[j] == nums[--j]) {}
+                }else {
+                    while(i < j && nums[i] == nums[++i]) {}
+                }
+            }
+        }
+        return resList;
+    }
+```
+
+
+
