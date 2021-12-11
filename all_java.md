@@ -297,8 +297,22 @@ Java集合体系
 
 > 优秀文章参考：https://juejin.cn/post/6844903933324836871#heading-2，文中提到了如何学习并发编程的思路
 
+![image-20211207102441195](assets/image-20211207102441195.png)
+
+并发编程体系学习思路：我认为主要分为以下几个模块
+
+- 多线程的基本原理以及基本使用
+  - 相关概念的理解
+    - 并发与高并发
+    - 并发与并行
+    - 进程与线程
+  - 多线程的使用场景
+  - java中多线程的基本使用
+- 监控以及问题排查
+
 ## 5.1 相关概念
 
+- 并发： 
 - 高并发：当前系统能够同时承载的并发数
 
 如何支撑高并发？
@@ -354,6 +368,10 @@ Java集合体系
 ### 13.1.4 更新SQL的执行流程
 
 ### 13.1.5 为什么要进行两阶段提交
+
+> 主要目的：是为了保证数据的一致性。
+
+如果写完redo log, 还没写完binlog, Mysql就出现异常，因为redo log可以用于数据恢复，但binlog里面没有相关日志，这时候slave服务器读取master服务器的binlog去做数据同步，就会出现数据不一致的情况
 
 ## 13.2 MySQL索引
 
@@ -958,13 +976,82 @@ BASE理论
 实战：
 
 - 283-移动零：https://leetcode-cn.com/problems/move-zeroes/
+
   - 优解：可以采用双指针方式, 时间复杂度O(n)
+
+  ```java
+    /**
+       * 双指针
+       * 1. 将非0元素往左边移动
+       * 2. 剩余用0填充
+       * @param nums
+       */
+      public void moveZeroes(int[] nums) {
+          if (nums == null || nums.length == 0){
+              return;
+          }
+          int j = 0;
+          for (int num : nums) {
+              if (num != 0){
+                  nums[j++] = num;
+              }
+          }
+          while (j < nums.length){
+              nums[j++] = 0;
+          }
+      }
+  ```
+
+  
+
 - 11-盛最多水的容器：https://leetcode-cn.com/problems/container-with-most-water/
+
   - 暴力枚举： 时间复杂度O(n^2)
   - 双指针：左右移动，每次移动短板，时间复杂度O(n)
+
+```java
+public int maxArea(int[] height) {
+        // 暴力求解，双层循环，时间复杂度为O(n^2)
+        // 双指针，时间复杂度为O(n)
+        // 面积s = (j-i)*Math.min(height[i],height[j])
+        int left = 0, right = height.length - 1, s = 0;
+        while (left < right){
+            s = Math.max(s, (right - left) * Math.min(height[right], height[left]));
+            if (height[left] < height[right]){
+                left++;
+            }else{
+                right--;
+            }
+        }
+        return s;
+    }
+```
+
+
+
 - 70-爬楼梯：https://leetcode-cn.com/problems/climbing-stairs/
   - 化繁为简的思考，找最近重复子问题，因为程序只能是if else, loop 或者递归
   - 动态规划：压缩空间，斐波拉契数列简化版，时间复杂度O(n)
+  - 图解可以看：https://leetcode-cn.com/problems/climbing-stairs/solution/cong-zhi-jue-si-wei-fen-xi-dong-tai-gui-hua-si-lu-/
+
+```java
+ public int climbStairs(int n) {
+        // f(n) = f(n-1) + f(n-2)
+        // 动态规划写法 O(n)
+        // 记录前两指针的值
+        int pre = 1; // f(1)
+        int cur = 1; // f(1)
+        for (int i = 2; i <= n; i++) {
+            int temp = cur;
+            cur += pre;
+            pre = temp;
+        }
+        return cur;
+    }
+```
+
+
+
 - 15-三数之和：https://leetcode-cn.com/problems/3sum/
   - 暴力三重遍历： 时间复杂度O(n^3)
   - 排序 + 哈希表： 时间复杂度O(n^2)
@@ -1003,5 +1090,63 @@ BASE理论
     }
 ```
 
+## 31.2 链表
 
+时间复杂度： 
+
+- 查询： O(n)
+- 删除/插入： O(1)
+
+实战
+
+- 206-链表反转：https://leetcode-cn.com/problems/reverse-linked-list/
+
+  - 链表迭代：时间复杂度：O(n)，空间复杂度：O(1)
+
+  ```java
+  public ListNode reverseList(ListNode head) {
+          // 链表迭代， 定义两个指针，pre指针，最初是指向null
+          // 指针cur指向链表head, 然后不断遍历，每次迭代cur, 就将cur指向pre
+          ListNode pre = null;
+          ListNode cur = head;
+          ListNode tmp = null;
+          while (cur != null) {
+              tmp = cur.next;
+              cur.next = pre;
+              pre = cur;
+              cur = tmp;
+          }
+          return pre;
+      }
+  ```
+
+  
+
+  - 递归：O(n)， 空间复杂度是O(n)
+
+    ```java
+    public ListNode reverseList(ListNode head){
+        // 递归中止条件是当前为空或者下一个节点为空
+        if(head == null || head.next == null) {
+            return head;
+        }
+        // 递归体, cur是最终节点的引用地址，不会改变，直到递归中止，这里需要注意，cur和head.next不是一直等价的
+        ListNode cur = reverseList(head.next);
+        head.next.next = head;
+        // 结束循环指向
+        head.next = null;
+        return cur;
+    }
+    ```
+
+    
+
+- 24-练练交换链表中的节点： https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+
+  - 链表迭代： 时间复杂度O(n), 空间复杂度O(1)
+
+  ```java
+  ```
+
+  
 
