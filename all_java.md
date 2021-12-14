@@ -968,46 +968,54 @@ BASE理论
 
 ## 31.1 数组
 
-时间复杂度：
+> 可以查看文档，里面详细分析了数组和链表的优缺点和特性
+>
+> https://leetcode-cn.com/problems/linked-list-cycle/solution/yi-wen-gao-ding-chang-jian-de-lian-biao-wen-ti-h-2/
 
-- 插入 or 删除 ： O(n)
-- 查询：O(1)
+数组，所有元素都连续的存储于一段内存中，且每个元素占用的内存大小相同。这使得数组具备了通过下标快速访问数据的能力。
+但连续存储的缺点也很明显，增加容量，增删元素的成本很高，时间复杂度均为 O(n)。
+增加数组容量需要先申请一块新的内存，然后复制原有的元素。如果需要的话，可能还要删除原先的内存。
 
-实战：
+数组的优缺点：
 
-- 283-移动零：https://leetcode-cn.com/problems/move-zeroes/
+- 优点： 可以根据偏移量实现快速随机读写，时间复杂度为O(1)
+- 缺点：扩容，增删元素很慢，时间复杂度为O(n)
 
-  - 优解：可以采用双指针方式, 时间复杂度O(n)
+### 283-移动零
 
-  ```java
-    /**
-       * 双指针
-       * 1. 将非0元素往左边移动
-       * 2. 剩余用0填充
-       * @param nums
-       */
-      public void moveZeroes(int[] nums) {
-          if (nums == null || nums.length == 0){
-              return;
-          }
-          int j = 0;
-          for (int num : nums) {
-              if (num != 0){
-                  nums[j++] = num;
-              }
-          }
-          while (j < nums.length){
-              nums[j++] = 0;
-          }
-      }
-  ```
+> https://leetcode-cn.com/problems/move-zeroes/
 
-  
+最优解：可以采用双指针方式, 时间复杂度O(n)
 
-- 11-盛最多水的容器：https://leetcode-cn.com/problems/container-with-most-water/
+```java
+ /**
+     * 双指针
+     * 1. 将非0元素往左边移动
+     * 2. 剩余用0填充
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length == 0){
+            return;
+        }
+        int j = 0;
+        for (int num : nums) {
+            if (num != 0){
+                nums[j++] = num;
+            }
+        }
+        while (j < nums.length){
+            nums[j++] = 0;
+        }
+    }
+```
 
-  - 暴力枚举： 时间复杂度O(n^2)
-  - 双指针：左右移动，每次移动短板，时间复杂度O(n)
+### 11-盛最多水的容器
+
+> https://leetcode-cn.com/problems/container-with-most-water/
+
+1. 暴力枚举： 时间复杂度O(n^2)
+2. 双指针：向内夹逼，左右移动，每次移动短板，时间复杂度O(n)
 
 ```java
 public int maxArea(int[] height) {
@@ -1029,10 +1037,14 @@ public int maxArea(int[] height) {
 
 
 
-- 70-爬楼梯：https://leetcode-cn.com/problems/climbing-stairs/
-  - 化繁为简的思考，找最近重复子问题，因为程序只能是if else, loop 或者递归
-  - 动态规划：压缩空间，斐波拉契数列简化版，时间复杂度O(n)
-  - 图解可以看：https://leetcode-cn.com/problems/climbing-stairs/solution/cong-zhi-jue-si-wei-fen-xi-dong-tai-gui-hua-si-lu-/
+### 70-爬楼梯
+
+> https://leetcode-cn.com/problems/climbing-stairs/
+>
+> 图解可以看：https://leetcode-cn.com/problems/climbing-stairs/solution/cong-zhi-jue-si-wei-fen-xi-dong-tai-gui-hua-si-lu-/
+
+1. 化繁为简的思考，找最近重复子问题，因为程序只能是if else, loop 或者递归
+2. 动态规划：压缩空间，斐波拉契数列简化版，时间复杂度O(n)
 
 ```java
  public int climbStairs(int n) {
@@ -1050,45 +1062,48 @@ public int maxArea(int[] height) {
     }
 ```
 
+### 15-三数之和
 
+> https://leetcode-cn.com/problems/3sum/
 
-- 15-三数之和：https://leetcode-cn.com/problems/3sum/
-  - 暴力三重遍历： 时间复杂度O(n^3)
-  - 排序 + 哈希表： 时间复杂度O(n^2)
-  - 排序 + 双指针：时间复杂度O(n^2)
+1. 暴力三重遍历： 时间复杂度O(n^3)
 
-```java
-// 升序排序 + 双指针方式
-    public List<List<Integer>> threeSum(int[] nums) {
-		List<List<Integer>> resList = new ArrayList<>();
-        // 长度不符合，直接结束逻辑
-        if(nums.length < 3){
-            return resList;
-        }
-        // 升序排序
-        Arrays.sort(nums);
-        for(int k = 0; k < nums.length - 2; k++) {
-            // 如果元素开始大于0，说明都不符合条件，可以结束逻辑
-            if(nums[k] > 0) break;
-            // 如果当前元素和上个元素相同，可以跳过
-            if(k > 0 &&nums[k] == nums[k -1]) continue;
-            int i = k + 1, j = nums.length -1;
-            while(i < j){
-                int sum = nums[k] + nums[i] + nums[j];
-                if(sum == 0) {
-                    resList.add(new ArrayList<>(Arrays.asList(nums[k], nums[i], nums[j])));
-                    while(i < j && nums[i] == nums[++i]) {}
-                    while(i < j && nums[j] == nums[--j]) {}
-                }else if(sum > 0) {
-					while(i < j && nums[j] == nums[--j]) {}
-                }else {
-                    while(i < j && nums[i] == nums[++i]) {}
-                }
-            }
-        }
-        return resList;
-    }
-```
+2. 排序 + 哈希表： 时间复杂度O(n^2)
+
+3. 排序 + 双指针：时间复杂度O(n^2)
+
+   ```java
+   // 升序排序 + 双指针方式
+       public List<List<Integer>> threeSum(int[] nums) {
+   		List<List<Integer>> resList = new ArrayList<>();
+           // 长度不符合，直接结束逻辑
+           if(nums.length < 3){
+               return resList;
+           }
+           // 升序排序
+           Arrays.sort(nums);
+           for(int k = 0; k < nums.length - 2; k++) {
+               // 如果元素开始大于0，说明都不符合条件，可以结束逻辑
+               if(nums[k] > 0) break;
+               // 如果当前元素和上个元素相同，可以跳过
+               if(k > 0 &&nums[k] == nums[k -1]) continue;
+               int i = k + 1, j = nums.length -1;
+               while(i < j){
+                   int sum = nums[k] + nums[i] + nums[j];
+                   if(sum == 0) {
+                       resList.add(new ArrayList<>(Arrays.asList(nums[k], nums[i], nums[j])));
+                       while(i < j && nums[i] == nums[++i]) {}
+                       while(i < j && nums[j] == nums[--j]) {}
+                   }else if(sum > 0) {
+   					while(i < j && nums[j] == nums[--j]) {}
+                   }else {
+                       while(i < j && nums[i] == nums[++i]) {}
+                   }
+               }
+           }
+           return resList;
+       }
+   ```
 
 ## 31.2 链表
 
@@ -1097,56 +1112,175 @@ public int maxArea(int[] height) {
 - 查询： O(n)
 - 删除/插入： O(1)
 
-实战
+链表的基本处理方式
 
-- 206-链表反转：https://leetcode-cn.com/problems/reverse-linked-list/
+- 迭代
+- 递归
 
-  - 链表迭代：时间复杂度：O(n)，空间复杂度：O(1)
+### 206-链表反转
+
+> https://leetcode-cn.com/problems/reverse-linked-list/
+
+解法：
+
+- 递归：时间复杂度O(n), 空间复杂度 O(n)
+
+```java
+public ListNode reverseList(ListNode head){
+    // 递归中止条件是当前为空或者下一个节点为空
+    if(head == null || head.next == null) {
+        return head;
+    }
+    // 递归体, cur是最终节点的引用地址，不会改变，直到递归中止，这里需要注意，cur和head.next不是一直等价的
+    ListNode cur = reverseList(head.next);
+    head.next.next = head;
+    // 结束循环指向
+    head.next = null;
+    return cur;
+}
+```
+
+
+
+- 迭代：时间复杂度O(n),空间复杂度O(1)
+
+```java
+public ListNode reverseList(ListNode head) {
+        // 链表迭代， 定义两个指针，pre指针，最初是指向null
+        // 指针cur指向链表head, 然后不断遍历，每次迭代cur, 就将cur指向pre
+        ListNode pre = null;
+        ListNode cur = head;
+        ListNode tmp = null;
+        while (cur != null) {
+            tmp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = tmp;
+        }
+        return pre;
+    }
+```
+
+### 24-两两交换链表中的节点
+
+> https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+
+- 链表迭代： 时间复杂度O(n), 空间复杂度O(1)
+
+```java
+public ListNode swapPairs(ListNode head) {
+        // 指针+交换
+        ListNode pre = new ListNode(0);
+        pre.next = head;
+        // 定义pre的指针
+        ListNode temp = pre;
+        while (temp.next != null && temp.next.next != null) {
+            ListNode start = temp.next;
+            ListNode end = temp.next.next;
+            // 交换节点
+            start.next = end.next;
+            end.next = start;
+            // 这里很容易忽视，原有的指针需要指向交换后的节点，不然链表很容易分叉
+            temp.next = end;
+            // 移动指针
+            temp = start;
+        }
+        return pre.next;
+    }
+```
+
+
+
+### 141 - 环形链表 
+
+> https://leetcode-cn.com/problems/linked-list-cycle/
+
+- 迭代+哈希表：时间复杂度O(n),  空间复杂度O(n)
+
+```java
+    public boolean hasCycle(ListNode head) {
+        Set<Integer> valSet = new HashSet<>();
+        ListNode cur = head;
+        while (cur != null) {
+            if (!valSet.add(cur.val)) {
+                return true;
+            }
+            cur = cur.next;
+        }
+        return false;
+    }
+```
+
+
+
+- 迭代+快慢指针：时间复杂度O(n), 空间复杂度O(1)
+
+  - 如果存在环形链表，那么迭代就会进入死循环中
+  - 所以，可以采用快慢指针，如果在迭代中相遇，说明就存在环形链表
 
   ```java
-  public ListNode reverseList(ListNode head) {
-          // 链表迭代， 定义两个指针，pre指针，最初是指向null
-          // 指针cur指向链表head, 然后不断遍历，每次迭代cur, 就将cur指向pre
-          ListNode pre = null;
-          ListNode cur = head;
-          ListNode tmp = null;
-          while (cur != null) {
-              tmp = cur.next;
-              cur.next = pre;
-              pre = cur;
-              cur = tmp;
+  /**
+       * 如果存在环形链表，快慢指针类似龟兔在环形操场跑步，迟早会相遇
+       * @param head
+       * @return
+       */
+     public boolean hasCycle(ListNode head) {
+          ListNode fast = head, slow = head;
+          while (true) {
+              // 说明没有环形链表, 快指针走完了或者没法继续往下走两步
+              if (fast == null || fast.next == null) return false;
+              fast = fast.next.next;
+              slow = slow.next;
+              if (fast == slow) break;
           }
-          return pre;
+          return true;
       }
   ```
 
-  
+### 142-环形链表2
 
-  - 递归：O(n)， 空间复杂度是O(n)
+> https://leetcode-cn.com/problems/linked-list-cycle-ii/
 
-    ```java
-    public ListNode reverseList(ListNode head){
-        // 递归中止条件是当前为空或者下一个节点为空
-        if(head == null || head.next == null) {
-            return head;
+- 哈希表方式 + 迭代， 时间复杂度O(n), 空间复杂度O(n)
+
+```java
+public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) return null;
+        // 哈希表方式
+        Set<Integer> set = new HashSet<>();
+        ListNode cur = head;
+        while (cur != null) {
+            if (!set.add(cur.val)) return cur;
+            cur = cur.next;
         }
-        // 递归体, cur是最终节点的引用地址，不会改变，直到递归中止，这里需要注意，cur和head.next不是一直等价的
-        ListNode cur = reverseList(head.next);
-        head.next.next = head;
-        // 结束循环指向
-        head.next = null;
-        return cur;
+        return null;
     }
-    ```
+```
 
-    
 
-- 24-练练交换链表中的节点： https://leetcode-cn.com/problems/swap-nodes-in-pairs/
 
-  - 链表迭代： 时间复杂度O(n), 空间复杂度O(1)
+- 快慢指针， 时间复杂度O(n), 空间复杂度O(n)
+  - 第一步，通过快慢指针发现是否有环，并获取当前的慢指针节点
+  - 第二步，将快指针回退到head，同节奏和慢指针迭代，当快慢指针重合的时候，就是入口
 
-  ```java
-  ```
+```java
+  public ListNode detectCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (true) {
+            if (fast == null || fast.next == null) return null;
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) break;
+        }
+        fast = head;
+        while (fast != slow) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return fast;
+    }
+```
 
-  
 
+
+## 字典树
