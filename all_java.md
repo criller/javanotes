@@ -960,11 +960,15 @@ BASE理论
 
 # 30. java算法
 
-# 31. 数据结构
+# 31. 数据结构与算法
 
 > 最大误区：做题只做一遍
 >
 > 优化的思想： 空间换时间和升维
+>
+> 参考网站：
+>
+> - Labuladong的算法小抄：https://labuladong.gitee.io/algo/2/17/19/，讲的不错，可以参考
 
 ## 31.1 数组
 
@@ -1282,5 +1286,147 @@ public ListNode detectCycle(ListNode head) {
 ```
 
 
+
+## 31.3 栈
+
+特性：先入后出 或者说 后入先出 LIFO(Last in First out)
+
+基本实现：
+
+- Stack：继承自Vector，线程安全，常用api
+  - empty():	判断栈是否为空
+  - peek(): 查看栈顶元素，但不移除
+  - pop(): 获取并移除栈顶元素
+  - push(): 将元素推入栈顶
+  - search(): 查询元素在栈内位置
+- Deque: 双端队列，也可以实现Stack相关功能，官方推荐使用Deque, 其提供了一组更完整和一直的LIFO的堆栈操作
+
+![image-20211215145955491](assets/image-20211215145955491.png)
+
+### 20-有效的括号
+
+> https://leetcode-cn.com/problems/valid-parentheses/
+
+- 哈希表 + 栈： 时间复杂度O(n), 空间复杂度O(n)
+
+  ```java
+  public boolean isValid(String s) {
+          // 栈特性： 先入后出
+          // 采用哈希表 + 栈
+         if (s == null || s.length() % 2 != 0) return false;
+         Map<Character, Character> paris = new HashMap<>() {{
+            put(')', '(');
+            put(']', '[');
+            put('}', '{');
+         }};
+         Stack<Character> stack = new Stack<>();
+          for (int i = 0; i < s.length(); i++) {
+              char c = s.charAt(i);
+              if (paris.containsKey(c)) {
+                  if (stack.empty() || stack.peek() != paris.get(c)) return false;
+                  stack.pop();
+              } else {
+                  stack.push(c);
+              }
+          }
+         return stack.empty();
+      }
+  ```
+
+
+
+### 155-最小栈
+
+> https://leetcode-cn.com/problems/min-stack/
+
+- 采用链表存储，每个节点保留 val, minVal, next
+
+```java
+class MinStack {
+    private class Node {
+        int value;
+        int minValue;
+        Node next;
+
+        public Node(int value, int minValue, Node next) {
+            this.value = value;
+            this.minValue = minValue;
+            this.next = next;
+        }
+    }
+
+    private Node head;
+
+    public MinStack() {
+
+    }
+    
+    public void push(int val) {
+        if (head == null) {
+            head = new Node(val, val, null);
+        } else {
+            Node node = new Node(val, Math.min(val, head.minValue), head);
+            head = node;
+        }
+    }
+    
+    public void pop() {
+        if (head != null) {
+            head = head.next;
+        }
+    }
+    
+    public int top() {
+        return head == null ? -1 : head.value;
+    }
+    
+    public int getMin() {
+        return head == null ? -1 : head.minValue;
+    }
+}
+```
+
+- 采用java stack + 变量存储最小值, pop和push的时间复杂度要大于方法一
+
+  -  入栈时，如果入栈元素<=最小值，先将最小值入栈，再入栈当前元素，最小值设置为当前元素
+  - 出栈时，如果出栈元素等于最小值，再弹出一次
+
+  ```java
+  class MinStack {
+      private Stack<Integer> stack = new Stack<>();
+      private int minValue = Integer.MAX_VALUE;
+  
+      public MinStack() {
+  
+      }
+  
+      public void push(int val) {
+          if (val <= minValue) {
+              stack.push(minValue);
+              stack.push(val);
+              minValue = val;
+          } else {
+              stack.push(val);
+          }
+      }
+  
+      public void pop() {
+          if (stack.empty()) return;
+          if (stack.pop() == minValue) {
+              minValue = stack.pop();
+          }
+      }
+  
+      public int top() {
+          return stack.peek();
+      }
+  
+      public int getMin() {
+          return minValue;
+      }
+  }
+  ```
+
+  
 
 ## 字典树
