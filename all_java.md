@@ -1573,4 +1573,67 @@ Binary Search Tree， 又称为二叉排序树
 
 Balanced Binary Tree，（AVL）是一种结构平衡的二叉搜索树，叶子节点高度差的绝对值不超过1
 
+### 实战题目
+
+#### 141-二叉树的前序遍历
+
+#### 94-二叉树的中序遍历
+
+#### 145-二叉树的后序遍历
+
+#### 102-二叉树的层序遍历
+
+#### 589-N叉树的前序遍历
+
+#### 590-N叉树的后序遍历
+
+#### 226-反转二叉树
+
+https://leetcode-cn.com/problems/invert-binary-tree/
+
+#### 98-验证有效二叉搜索树
+
+https://leetcode-cn.com/problems/validate-binary-search-tree/
+
+#### 104-获取二叉树的最大深度
+
+https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/
+
+#### 111-获取二叉树的最小深度
+
+https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
+
+#### 297-二叉树的序列化与反序列化
+
+https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
+
+#### 236-二叉树的最近公共祖先
+
+https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/
+
+#### 105-从前序和中序遍历的序列构造一棵二叉树
+
+https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+
 ## 字典树
+
+## 递归
+
+一般递归or 范型递归的模板
+
+```java
+public void recursion() {
+	// 递归结束条件
+  // 处理逻辑
+  // 递归下探 or 进入递归体
+  // 递归后的逻辑处理
+  
+}
+```
+
+
+
+### 22-生成括号
+
+https://leetcode-cn.com/problems/generate-parentheses/
+
